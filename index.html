@@ -7,7 +7,8 @@
 
     <script>
         var socket = io("ws://infinite-sea-83450.herokuapp.com");
-
+        var color =  'black';
+        var linewidth = 5;
         var myPics;
         var context;
         function InitThis() {
@@ -52,8 +53,8 @@
 
         function drawLine(context, x1, y1, x2, y2) {
             context.beginPath();
-            context.strokeStyle = 'black';
-            context.lineWidth = 1;
+            context.strokeStyle = color;
+            context.lineWidth = linewidth;
             context.moveTo(x1, y1);
             context.lineTo(x2, y2);
             context.stroke();
@@ -68,11 +69,25 @@
             drawLine(context, x, y, offsetX, offsetY);
         });
 
-
+        function test(isEraser) {
+            if(isEraser) {
+                color='white'
+                linewidth = 100;
+            } else {
+                color='black';
+                linewidth = 5;
+            }
+        }
+        function colorPick() {
+           const value  =  document.getElementById('colorpicker').value;
+           color =  value;
+        }
     </script>
   </head>
   <body onload = "InitThis()" >
-
+    <input type="color" id="colorpicker" onchange="colorPick()">
+    <button onclick="test()">Pen Tool</button>
+    <button  onclick="test(true)">Eraser</button>
     <canvas id="myCanvas"  style="border:1px solid black;"></canvas>
 
 
