@@ -69,6 +69,11 @@
 
             drawLine(context, x, y, offsetX, offsetY,color, linewidth);
         });
+        socket.on('clear All', function(msg) {
+          context.clearRect(0, 0, myPics.width, myPics.height);
+        });
+
+
 
         function test(isEraser) {
             if(isEraser) {
@@ -84,12 +89,19 @@
            color =  value;
           linewidth = 5;
         }
+        function cleaAll() {
+            context.clearRect(0, 0, myPics.width, myPics.height);
+          socket.emit('clear All', {});
+
+        }
     </script>
   </head>
   <body onload = "InitThis()" >
     <input type="color" id="colorpicker" onchange="colorPick()">
     <button onclick="test()">Pen Tool</button>
     <button  onclick="test(true)">Eraser</button>
+    <button  onclick="cleaAll(true)">Clear All</button>
+
     <canvas id="myCanvas"  style="border:1px solid black;"></canvas>
 
 
