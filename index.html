@@ -26,28 +26,28 @@
 
 
             myPics.addEventListener('mousedown', e => {
-                x = e.offsetX;
-                y = e.offsetY;
+                x = getMosuePositionOnCanvas(e).x;
+               y = getMosuePositionOnCanvas(e).y;
                 isDrawing = true;
             });
           myPics.addEventListener('touchstart', e => {
-            x = e.touches[0].clientX;
-            y = e.touches[0].clientY;
+            x = getMosuePositionOnCanvas(e).x;
+            y = getMosuePositionOnCanvas(e).y;
             isDrawing = true;
           });
 
             myPics.addEventListener('mousemove', e => {
                 if (isDrawing === true) {
-                    drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
-                    socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
+                    drawLine(context, x, y, getMosuePositionOnCanvas(e).x, getMosuePositionOnCanvas(e).y,color,linewidth);
+                    socket.emit('chat message',  {x: x,y:y ,offsetX: getMosuePositionOnCanvas(e).x,offsetY:getMosuePositionOnCanvas(e).y, color: color,linewidth: linewidth});
                     x = e.offsetX;
                     y = e.offsetY;
                 }
             });
           myPics.addEventListener('touchmove', e => {
             if (isDrawing === true) {
-              drawLine(context, x, y, e.touches[0].offsetX, e.touches[0].offsetY,color,linewidth);
-              socket.emit('chat message',  {x: x,y:y ,offsetX: e.touches[0].clientX,offsetY:e.touches[0].clientY, color: color,linewidth: linewidth});
+              drawLine(context, x, y, getMosuePositionOnCanvas(e).x, getMosuePositionOnCanvas(e).y,color,linewidth);
+              socket.emit('chat message',  {x: x,y:y ,offsetX: getMosuePositionOnCanvas(e).x,offsetY:getMosuePositionOnCanvas(e).y, color: color,linewidth: linewidth});
               x = e.offsetX;
               y = e.offsetY;
             }
@@ -55,9 +55,8 @@
 
             window.addEventListener('mouseup', e => {
                 if (isDrawing === true) {
-                    drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
-                    socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
-                    x = 0;
+                    drawLine(context, x, y,getMosuePositionOnCanvas(e).x, getMosuePositionOnCanvas(e).y,color,linewidth);
+                    socket.emit('chat message',  {x: x,y:y ,offsetX: getMosuePositionOnCanvas(e).x,offsetY:getMosuePositionOnCanvas(e).y, color: color,linewidth: linewidth});      x = 0;
                     y = 0;
                     isDrawing = false;
                 }
@@ -65,8 +64,8 @@
 
           window.addEventListener('touchend', e => {
             if (isDrawing === true) {
-              drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
-              socket.emit('chat message',  {x: x,y:y ,offsetX: e.touches[0].clientX,offsetY:e.touches[0].clientY, color: color,linewidth: linewidth});
+              drawLine(context, x, y,getMosuePositionOnCanvas(e).x, getMosuePositionOnCanvas(e).y,color,linewidth);
+              socket.emit('chat message',  {x: x,y:y ,offsetX: getMosuePositionOnCanvas(e).x,offsetY:getMosuePositionOnCanvas(e).y, color: color,linewidth: linewidth});      x = 0;
               x = 0;
               y = 0;
               isDrawing = false;
@@ -116,6 +115,20 @@
             context.clearRect(0, 0, myPics.width, myPics.height);
           socket.emit('clear All', {});
 
+        }
+
+
+
+
+
+        function getMosuePositionOnCanvas(event) {
+          const clientX = event.clientX || event.touches[0].clientX;
+          const clientY = event.clientY || event.touches[0].clientY;
+          const { offsetLeft, offsetTop } = event.target;
+          const canvasX = clientX - offsetLeft;
+          const canvasY = clientY - offsetTop;
+
+          return { x: canvasX, y: canvasY };
         }
     </script>
   </head>
