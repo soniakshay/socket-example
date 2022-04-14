@@ -30,6 +30,11 @@
                 y = e.offsetY;
                 isDrawing = true;
             });
+          myPics.addEventListener('touchstart', e => {
+            x = e.offsetX;
+            y = e.offsetY;
+            isDrawing = true;
+          });
 
             myPics.addEventListener('mousemove', e => {
                 if (isDrawing === true) {
@@ -39,6 +44,14 @@
                     y = e.offsetY;
                 }
             });
+          myPics.addEventListener('touchmove', e => {
+            if (isDrawing === true) {
+              drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
+              socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
+              x = e.offsetX;
+              y = e.offsetY;
+            }
+          });
 
             window.addEventListener('mouseup', e => {
                 if (isDrawing === true) {
@@ -49,6 +62,16 @@
                     isDrawing = false;
                 }
             });
+
+          window.addEventListener('touchend', e => {
+            if (isDrawing === true) {
+              drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
+              socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
+              x = 0;
+              y = 0;
+              isDrawing = false;
+            }
+          });
 
 
         }
