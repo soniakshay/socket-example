@@ -31,8 +31,8 @@
                 isDrawing = true;
             });
           myPics.addEventListener('touchstart', e => {
-            x = e.offsetX;
-            y = e.offsetY;
+            x = e.touches[0].offsetX;
+            y = e.touches[0].offsetY;
             isDrawing = true;
           });
 
@@ -46,8 +46,8 @@
             });
           myPics.addEventListener('touchmove', e => {
             if (isDrawing === true) {
-              drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
-              socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
+              drawLine(context, x, y, e.touches[0].offsetX, e.touches[0].offsetY,color,linewidth);
+              socket.emit('chat message',  {x: x,y:y ,offsetX: e.touches[0].offsetX,offsetY:e.touches[0].offsetY, color: color,linewidth: linewidth});
               x = e.offsetX;
               y = e.offsetY;
             }
@@ -66,7 +66,7 @@
           window.addEventListener('touchend', e => {
             if (isDrawing === true) {
               drawLine(context, x, y, e.offsetX, e.offsetY,color,linewidth);
-              socket.emit('chat message',  {x: x,y:y ,offsetX: e.offsetX,offsetY:e.offsetY, color: color,linewidth: linewidth});
+              socket.emit('chat message',  {x: x,y:y ,offsetX: e.touches[0].offsetX,offsetY:e.touches[0].offsetY, color: color,linewidth: linewidth});
               x = 0;
               y = 0;
               isDrawing = false;
